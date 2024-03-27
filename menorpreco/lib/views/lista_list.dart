@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:menorpreco/components/lista_tile.dart';
-import 'package:menorpreco/data/dummy_listas.dart';
+import 'package:menorpreco/provider/listas.dart';
+import 'package:menorpreco/routes/app_routes.dart';
+import 'package:provider/provider.dart';
 
 class ListaList extends StatelessWidget {
-  const ListaList({super.key});
-
   @override
   Widget build(BuildContext context) {
-
-    final teste = {...DUMMY_LISTAS};
+    final ListasNotifier listaProvider = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Listas de Compras'),
+        title: Text('Listas de Compras'),
+        centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(AppRoutes.LISTA_FORM);
+        },
+        child: Icon(Icons.add),
       ),
       body: ListView.builder(
-        itemCount: teste.length,
-        itemBuilder: (ctx, i) => ListaTile(teste.values.elementAt(i)), 
+        itemCount: listaProvider.count,
+        itemBuilder: (ctx, i) => ListaTile(listaProvider.byIndex(i)),
       ),
     );
   }

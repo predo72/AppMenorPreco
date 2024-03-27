@@ -1,7 +1,7 @@
 class Lista {
-  final num id;
+  final String id;
   final String nome;
-  final num finalizada;
+  final int finalizada;
 
   const Lista({
     required this.id,

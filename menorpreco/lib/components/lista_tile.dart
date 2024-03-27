@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:menorpreco/models/lista.dart';
+import 'package:menorpreco/provider/listas.dart';
+import 'package:menorpreco/routes/app_routes.dart';
+import 'package:provider/provider.dart';
 
 class ListaTile extends StatelessWidget {
   final Lista lista;
@@ -18,12 +21,47 @@ class ListaTile extends StatelessWidget {
         child: Row(
           children: <Widget>[
             IconButton(
-              onPressed: () {},
               icon: Icon(Icons.edit),
+              color: Colors.grey,
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.LISTA_FORM,
+                  arguments: lista,
+                );
+              },
             ),
             IconButton(
-              onPressed: () {},
               icon: Icon(Icons.delete),
+              color: Colors.red,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text('Excluir a Lista?'),
+                    content: Text(
+                        'Todos os produtos desta lista serão excluídos juntamente com a lista.'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Não'),
+                        onPressed: () => Navigator.of(context).pop(false),
+                      ),
+                      TextButton(
+                        child: Text('Sim'),
+                        onPressed: () => Navigator.of(context).pop(true),
+                      ),
+                    ],
+                  ),
+                ).then((confirmed) {
+                  if (confirmed) {
+                    Provider.of<ListasNotifier>(
+                      context,
+                      listen: false,
+                    ).remove(
+                      lista.id,
+                    );
+                  }
+                });
+              },
             ),
           ],
         ),
