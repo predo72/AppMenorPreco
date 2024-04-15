@@ -30,6 +30,27 @@ class _ListaFormState extends State<ListaForm> {
     }
   }
 
+  void salvar() {
+    if (_form.currentState!.validate()) {
+      _form.currentState?.save();
+      _formData['id'] = _formData['id'] == null
+          ? Random().nextDouble().toString()
+          : _formData['id'];
+      _formData['finalizada'] = _formData['finalizada'] == null ? 0 : 1;
+      Provider.of<ListasNotifier>(
+        context,
+        listen: false,
+      ).put(
+        Lista(
+          id: _formData['id'],
+          nome: _formData['nome'],
+          finalizada: _formData['finalizada'],
+        ),
+      );
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool? isChecked = _formData['finalizada'] == 1 ? true : false;
@@ -39,26 +60,7 @@ class _ListaFormState extends State<ListaForm> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
-              if (_form.currentState!.validate()) {
-                _form.currentState?.save();
-                _formData['id'] = _formData['id'] == null
-                    ? Random().nextDouble().toString()
-                    : _formData['id'];
-                _formData['finalizada'] = _formData['finalizada'] == null ? 0 : 1;
-                Provider.of<ListasNotifier>(
-                  context,
-                  listen: false,
-                ).put(
-                  Lista(
-                    id: _formData['id'],
-                    nome: _formData['nome'],
-                    finalizada: _formData['finalizada'],
-                  ),
-                );
-                Navigator.of(context).pop();
-              }
-            },
+            onPressed: () => salvar(),
           )
         ],
       ),

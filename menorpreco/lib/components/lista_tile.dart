@@ -8,6 +8,50 @@ class ListaTile extends StatelessWidget {
   final Lista lista;
   const ListaTile(this.lista, {super.key});
 
+  void editar(context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.LISTA_FORM,
+      arguments: lista,
+    );
+  }
+
+  void deletar(context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Excluir a Lista?'),
+        content: Text(
+            'Todos os produtos desta lista serão excluídos juntamente com a lista.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Não'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: Text('Sim'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    ).then((confirmed) {
+      if (confirmed) {
+        Provider.of<ListasNotifier>(
+          context,
+          listen: false,
+        ).remove(
+          lista.id,
+        );
+      }
+    });
+  }
+
+  void visualizar(context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.LISTA_ITENS,
+      arguments: lista,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final finalizada =
@@ -23,49 +67,17 @@ class ListaTile extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.grey,
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  AppRoutes.LISTA_FORM,
-                  arguments: lista,
-                );
-              },
+              onPressed: () => editar(context),
             ),
             IconButton(
               icon: Icon(Icons.delete),
               color: Colors.red,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text('Excluir a Lista?'),
-                    content: Text(
-                        'Todos os produtos desta lista serão excluídos juntamente com a lista.'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('Não'),
-                        onPressed: () => Navigator.of(context).pop(false),
-                      ),
-                      TextButton(
-                        child: Text('Sim'),
-                        onPressed: () => Navigator.of(context).pop(true),
-                      ),
-                    ],
-                  ),
-                ).then((confirmed) {
-                  if (confirmed) {
-                    Provider.of<ListasNotifier>(
-                      context,
-                      listen: false,
-                    ).remove(
-                      lista.id,
-                    );
-                  }
-                });
-              },
+              onPressed: () => deletar(context),
             ),
           ],
         ),
       ),
+      onTap: () => visualizar(context),
     );
   }
 }
