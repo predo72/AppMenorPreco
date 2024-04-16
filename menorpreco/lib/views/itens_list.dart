@@ -1,45 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:menorpreco/constants/status_finalizada.dart';
+import 'package:menorpreco/components/item_tile.dart';
 import 'package:menorpreco/models/lista.dart';
-import 'package:menorpreco/provider/listas.dart';
+import 'package:menorpreco/provider/itens.dart';
 import 'package:provider/provider.dart';
 
-class ListaItens extends StatefulWidget {
-  const ListaItens({super.key});
+class ItemList extends StatefulWidget {
+  const ItemList({super.key});
 
   @override
-  State<ListaItens> createState() => _ListaItensState();
+  State<ItemList> createState() => _ItemListState();
 }
 
-class _ListaItensState extends State<ListaItens> {
-  final _form = GlobalKey<FormState>();
-  final Map<String, dynamic> _formData = {};
-  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+class _ItemListState extends State<ItemList> {
+  final Map<String, dynamic> _formDataLista = {};
 
   void _loadFormData(Lista lista) {
-    _formData['id'] = lista.id;
-    _formData['nome'] = lista.nome;
-    _formData['finalizada'] = lista.finalizada;
-  }
-
-  void finalizarLista() {
-      _form.currentState?.save();
-    Provider.of<ListasNotifier>(
-        context,
-        listen: false,
-      ).put(
-        Lista(
-          id: _formData['id'],
-          nome: _formData['nome'],
-          finalizada: ConstantsLista.FINALIZADA,
-        ),
-      );
-      Navigator.of(context).pop();
-  }
-
-  void adicionarItem() {
-
+    _formDataLista['id'] = lista.id;
+    _formDataLista['nome'] = lista.nome;
+    _formDataLista['finalizada'] = lista.finalizada;
   }
 
   @override
@@ -52,30 +30,16 @@ class _ListaItensState extends State<ListaItens> {
 
   @override
   Widget build(BuildContext context) {
+    final ItensNotifier itemProvider = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(_formData['nome']),
+        title: Text(_formDataLista['nome']),
+        centerTitle: true,
       ),
-      floatingActionButton: SpeedDial(
-        icon: Icons.format_list_bulleted_add,
-        openCloseDial: isDialOpen,
-        onPress: () => isDialOpen.value = !isDialOpen.value,
-        children: [
-          SpeedDialChild(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.lightGreen,
-              foregroundColor: Colors.white,
-              label: 'Adicionar Item',
-              onTap: () => adicionarItem,
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.check),
-              backgroundColor: Colors.deepOrangeAccent,
-              foregroundColor: Colors.white,
-              label: 'Finalizar Lista',
-              onTap: () => finalizarLista,
-            ),
-        ],
+      body: ListView.builder(
+        itemCount: itemProvider.count,
+        itemBuilder: (ctx, i) => ItemTile(itemProvider.byIndex(i)),
       ),
     );
   }

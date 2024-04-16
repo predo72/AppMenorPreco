@@ -1,6 +1,6 @@
 import 'package:menorpreco/models/item.dart';
 
-const DUMMY_LISTAS = {
+const DUMMY_ITENS = {
   '1': Item(
     idLista: '1',
     id: '1',
