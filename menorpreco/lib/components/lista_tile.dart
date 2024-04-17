@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:menorpreco/models/lista.dart';
 import 'package:menorpreco/provider/listas.dart';
 import 'package:menorpreco/routes/app_routes.dart';
@@ -15,7 +16,7 @@ class ListaTile extends StatelessWidget {
     );
   }
 
-  void deletar(context) {
+  void excluir(context) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -45,6 +46,8 @@ class ListaTile extends StatelessWidget {
     });
   }
 
+  void finalizar(context) {}
+
   void visualizar(context) {
     Navigator.of(context).pushNamed(
       AppRoutes.LISTA_ITENS,
@@ -56,28 +59,36 @@ class ListaTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final finalizada =
         lista.finalizada == 1 ? Text('Finalizada') : Text('Aberta');
-    return ListTile(
-      leading: Icon(Icons.format_list_bulleted_outlined),
-      title: Text(lista.nome),
-      subtitle: finalizada,
-      trailing: Container(
-        width: 100,
-        child: Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              color: Colors.grey,
-              onPressed: () => editar(context),
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              color: Colors.red,
-              onPressed: () => deletar(context),
-            ),
-          ],
-        ),
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.6,
+        children: [
+          SlidableAction(
+            label: 'Finalizar',
+            backgroundColor: Colors.lightGreen,
+            icon: Icons.check_box_outlined,
+            onPressed: (ctx) => finalizar(context),
+          ),
+          SlidableAction(
+            label: 'Editar',
+            backgroundColor: Colors.blueAccent,
+            icon: Icons.edit,
+            onPressed: (ctx) => editar(context),
+          ),
+          SlidableAction(
+            label: 'Excluir',
+            backgroundColor: Colors.redAccent,
+            icon: Icons.delete,
+            onPressed: (ctx) => excluir(context),
+          ),
+        ],
       ),
-      onTap: () => visualizar(context),
+      child: ListTile(
+        title: Text(lista.nome),
+        subtitle: finalizada,
+        onTap: () => visualizar(context),
+      ),
     );
   }
 }
