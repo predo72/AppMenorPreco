@@ -9,6 +9,45 @@ class ListaTile extends StatelessWidget {
   final Lista lista;
   const ListaTile(this.lista, {super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    final finalizada =
+        lista.finalizada == 1 ? Text('Finalizada') : Text('Aberta');
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.6,
+        children: [
+          SlidableAction(
+            label: 'Finalizar',
+            backgroundColor: Colors.lightGreen,
+            icon: Icons.check_box_outlined,
+            onPressed: (ctx) => finalizar(context),
+          ),
+          SlidableAction(
+            label: 'Editar',
+            backgroundColor: Colors.blueAccent,
+            icon: Icons.edit,
+            onPressed: (ctx) => editar(context),
+          ),
+          SlidableAction(
+            label: 'Remover',
+            backgroundColor: Colors.redAccent,
+            icon: Icons.delete,
+            onPressed: (ctx) => remover(context),
+          ),
+        ],
+      ),
+      child: ListTile(
+        title: Text(lista.nome),
+        subtitle: finalizada,
+        onTap: () => visualizar(context),
+      ),
+    );
+  }
+
+  void finalizar(context) {}
+
   void editar(context) {
     Navigator.of(context).pushNamed(
       AppRoutes.LISTA_FORM,
@@ -16,7 +55,7 @@ class ListaTile extends StatelessWidget {
     );
   }
 
-  void excluir(context) {
+  void remover(context) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -46,49 +85,10 @@ class ListaTile extends StatelessWidget {
     });
   }
 
-  void finalizar(context) {}
-
   void visualizar(context) {
     Navigator.of(context).pushNamed(
       AppRoutes.LISTA_ITENS,
       arguments: lista,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final finalizada =
-        lista.finalizada == 1 ? Text('Finalizada') : Text('Aberta');
-    return Slidable(
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.6,
-        children: [
-          SlidableAction(
-            label: 'Finalizar',
-            backgroundColor: Colors.lightGreen,
-            icon: Icons.check_box_outlined,
-            onPressed: (ctx) => finalizar(context),
-          ),
-          SlidableAction(
-            label: 'Editar',
-            backgroundColor: Colors.blueAccent,
-            icon: Icons.edit,
-            onPressed: (ctx) => editar(context),
-          ),
-          SlidableAction(
-            label: 'Excluir',
-            backgroundColor: Colors.redAccent,
-            icon: Icons.delete,
-            onPressed: (ctx) => excluir(context),
-          ),
-        ],
-      ),
-      child: ListTile(
-        title: Text(lista.nome),
-        subtitle: finalizada,
-        onTap: () => visualizar(context),
-      ),
     );
   }
 }

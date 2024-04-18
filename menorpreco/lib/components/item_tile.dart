@@ -9,33 +9,27 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.5,
+        extentRatio: 0.6,
         children: [
           SlidableAction(
+            label: 'Finalizar',
+            backgroundColor: Colors.lightGreen,
+            icon: Icons.check_box_outlined,
+            onPressed: (ctx) => finalizar(context),
+          ),
+          SlidableAction(
             label: 'Editar',
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blueAccent,
             icon: Icons.edit,
-            onPressed: (context) {},
+            onPressed: (ctx) => editar(context),
           ),
           SlidableAction(
             label: 'Remover',
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.redAccent,
             icon: Icons.delete,
-            onPressed: (context) {},
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            label: 'Comprado',
-            backgroundColor: Colors.blueAccent,
-            icon: Icons.check_box_outlined,
-            onPressed: (context) {},
+            onPressed: (ctx) => remover(context),
           ),
         ],
       ),
@@ -45,4 +39,10 @@ class ItemTile extends StatelessWidget {
       ),
     );
   }
+
+  finalizar(context) {}
+
+  editar(context) {}
+
+  remover(context) {}
 }
