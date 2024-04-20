@@ -15,5 +15,5 @@ const DUMMY_LISTAS = {
     id: '3',
     nome: 'Lista Exemplo 3',
     finalizada: 0,
-  ),
+  ), 
 };
