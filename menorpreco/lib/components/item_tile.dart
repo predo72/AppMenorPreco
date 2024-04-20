@@ -11,7 +11,7 @@ class ItemTile extends StatelessWidget {
     return Slidable(
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.6,
+        extentRatio: 0.7,
         children: [
           SlidableAction(
             label: 'Finalizar',

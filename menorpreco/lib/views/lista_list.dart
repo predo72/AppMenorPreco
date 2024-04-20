@@ -13,6 +13,12 @@ class ListaList extends StatelessWidget {
       appBar: AppBar(
         title: Text('Listas de Compras'),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.filter_alt_outlined),
+            onPressed: () => (),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

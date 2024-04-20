@@ -11,18 +11,23 @@ class ListaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final finalizada =
+    final subtitleLista =
         lista.finalizada == 1 ? Text('Finalizada') : Text('Aberta');
+    final lblButtonStatus =
+        lista.finalizada == 1 ? 'Abrir' : 'Finalizar';
+    final iconButtonStatus = 
+        lista.finalizada == 1 ? Icons.check_box_outline_blank : Icons.check_box_outlined; 
+    
     return Slidable(
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.6,
+        extentRatio: 0.7,
         children: [
           SlidableAction(
-            label: 'Finalizar',
+            label: lblButtonStatus,
             backgroundColor: Colors.lightGreen,
-            icon: Icons.check_box_outlined,
-            onPressed: (ctx) => finalizar(context),
+            icon: iconButtonStatus,
+            onPressed: (ctx) => alterarStatus(context),
           ),
           SlidableAction(
             label: 'Editar',
@@ -40,13 +45,27 @@ class ListaTile extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(lista.nome),
-        subtitle: finalizada,
+        subtitle: subtitleLista,
         onTap: () => visualizar(context),
       ),
     );
   }
 
-  void finalizar(context) {}
+  void alterarStatus(context) {    
+    final newStatus =
+        lista.finalizada == 1 ? 0: 1;
+
+    Provider.of<ListasNotifier>(
+      context,
+      listen: false,
+    ).put(
+      Lista(
+        id: lista.id,
+        nome: lista.nome,
+        finalizada: newStatus,
+      ),
+    );
+  }
 
   void editar(context) {
     Navigator.of(context).pushNamed(
